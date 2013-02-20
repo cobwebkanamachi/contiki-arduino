@@ -80,7 +80,9 @@ leds_blink(void)
   inv = ~(leds ^ invert);
   leds_invert(inv);
 
-  clock_delay(400);
+  // 2.83 * 400 = 1132
+  //clock_delay(400);
+  clock_delay_usec(1132);
 
   leds_invert(inv);
 }
@@ -120,8 +122,4 @@ leds_invert(unsigned char ledv) {
   invert = invert ^ ledv;
   show_leds(ledv);
 }
-/*---------------------------------------------------------------------------*/
-void leds_green(int o) { o?leds_on(LEDS_GREEN):leds_off(LEDS_GREEN); }
-void leds_yellow(int o) { o?leds_on(LEDS_YELLOW):leds_off(LEDS_YELLOW); }
-void leds_red(int o) { o?leds_on(LEDS_RED):leds_off(LEDS_RED); }
 /*---------------------------------------------------------------------------*/

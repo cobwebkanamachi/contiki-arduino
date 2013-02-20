@@ -56,13 +56,18 @@
 #endif
 
 /* Clock ticks per second */
-#define CLOCK_CONF_SECOND 125
-
+#if defined (__AVR_ATmega328P__) // for Uno and Duemilanove-238
+# define CLOCK_CONF_SECOND 256
+#else
+# define CLOCK_CONF_SECOND 128
+#endif
 
 /* LED ports */
+#define PLATFORM_HAS_LEDS    1
+#if 0 
 #define LEDS_PxDIR DDRA /**< port direction register */
 #define LEDS_PxOUT PORTA /**< port register */
-#if 0
+
 #define LEDS_CONF_RED    0x04 /**< red led */
 #define LEDS_CONF_GREEN  0x02 /**< green led */
 #define LEDS_CONF_YELLOW 0x01 /**< yellow led */
