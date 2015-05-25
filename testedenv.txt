@@ -1,0 +1,36 @@
+test platform:
+mac osx 10.9.5, arduino 1.0.5
+ubuntu (cat /etc/lsb-release)
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=12.04
+DISTRIB_CODENAME=precise
+DISTRIB_DESCRIPTION="Ubuntu 12.04 LTS"
+hardware target:
+self made breadboard arduino compatible machine.
+(atmega328p + FTDI FT232RL http://akizukidenshi.com/catalog/g/gK-01977)
+avr writer:
+avrispmkii
+
+1. make synop (on ubuntu)
+http://iot-neuron-networks.blogspot.jp/2013/08/install-contiki-os-with-arduino-uno.html
+git clone https://github.com/contiki/contiki-arduino
+make TARGET=arduino ARDUINO_MODEL=Uno CONTIKI=../.. 
+2. how to make hex (on ubuntu)
+avr-objcopy hello-world.arduino -j .text -j .data -O ihex hello-world.hex
+3. copy the .hex file to osx
+share directory on osx, cp .hex to /media/sf_win/shared_dir
+4. avrdude
+4.1 fuse reset for overwriting arduino made hex with contiki hex (or vice versa)
+/Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin/avrdude -C/Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr/etc/avrdude.conf -P usb -c avrispmkii -p atmega328p -v -v -v -v -e -U efuse:w:0x05:m -U hfuse:w:0xD6:m -U lfuse:w:0xFF:m
+4.2 write down hex into uno
+/Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin/avrdude -C/Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr/etc/avrdude.conf -v -v -v -v -patmega328p -cavrispmkii -P usb -b57600 -D -Uflash:w:./hello-world.hex:i
+5. test
+5.1 connect usb cable from osx to uno compatible.
+5.2 open terminal (used coolterm), then set params bellow, power on/off.
+- 9600baud
+- else are default.
+- connect
+5.3 output
+********BOOTING CONTIKI*********
+System online.
+Hello, world
